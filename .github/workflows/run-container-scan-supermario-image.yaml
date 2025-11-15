@@ -25,9 +25,16 @@ jobs:
           docker pull docker.io/diliprathod/supermario-js-gitops:${{ env.VERSION }}
           docker save -o supermariolatestdockerimage.tar docker.io/diliprathod/supermario-js-gitops:${{ env.VERSION }}
      
+      # - name: Run Trivy vulnerability scanner in tarball mode
+      #   uses: aquasecurity/trivy-action@master
+      #   with:
+      #     input: /github/workspace/supermariolatestdockerimage.tar
+      #     exit-code: '1'
+      #     severity: 'CRITICAL,HIGH'
       - name: Run Trivy vulnerability scanner in tarball mode
         uses: aquasecurity/trivy-action@master
         with:
-          input: /github/workspace/supermariolatestdockerimage.tar
+          scan-type: 'image'
+          image-ref: supermariolatestdockerimage.tar
           exit-code: '1'
-          severity: 'CRITICAL,HIGH'
+          severity: 'CRITICAL,HIGH'      
