@@ -31,10 +31,21 @@ jobs:
       #     input: /github/workspace/supermariolatestdockerimage.tar
       #     exit-code: '1'
       #     severity: 'CRITICAL,HIGH'
+
+      # - name: Run Trivy vulnerability scanner in tarball mode
+      #   uses: aquasecurity/trivy-action@master
+      #   with:
+      #     scan-type: 'image'
+      #     image-ref: supermariolatestdockerimage.tar
+      #     exit-code: '1'
+      #     severity: 'CRITICAL,HIGH'      
+
+
       - name: Run Trivy vulnerability scanner in tarball mode
         uses: aquasecurity/trivy-action@master
         with:
           scan-type: 'image'
-          image-ref: supermariolatestdockerimage.tar
+          input: ${{ github.workspace }}/supermariolatestdockerimage.tar
+          format: 'table'
           exit-code: '1'
-          severity: 'CRITICAL,HIGH'      
+          severity: 'CRITICAL,HIGH'
