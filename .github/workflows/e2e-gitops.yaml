@@ -47,6 +47,15 @@ jobs:
         run: |
           docker build -t docker.io/diliprathod/supermario-js-gitops:${{ env.VERSION }} .
           docker push docker.io/diliprathod/supermario-js-gitops:${{ env.VERSION }}
+
+      # - name: Run Trivy vulnerability scanner in tarball mode
+      #   uses: aquasecurity/trivy-action@master
+      #   with:
+      #     scan-type: 'image'
+      #     input: ${{ github.workspace }}/supermariolatestdockerimage.tar
+      #     format: 'table'
+      #     exit-code: '0'
+      #     severity: 'CRITICAL,HIGH'
  
   run_container_image_scan_on_supermario_docker_image:
     runs-on: ubuntu-latest
@@ -64,12 +73,25 @@ jobs:
           docker pull docker.io/diliprathod/supermario-js-gitops:${{ env.VERSION }}
           docker save -o supermariolatestdockerimage.tar docker.io/diliprathod/supermario-js-gitops:${{ env.VERSION }}
      
+      # - name: Run Trivy vulnerability scanner in tarball mode
+      #   uses: aquasecurity/trivy-action@master
+      #   with:
+      #     input: /github/workspace/supermariolatestdockerimage.tar
+      #     exit-code: '0'
+      #     severity: 'CRITICAL,HIGH'
+
+
       - name: Run Trivy vulnerability scanner in tarball mode
         uses: aquasecurity/trivy-action@master
         with:
-          input: /github/workspace/supermariolatestdockerimage.tar
+          scan-type: 'image'
+          input: ${{ github.workspace }}/supermariolatestdockerimage.tar
+          format: 'table'
           exit-code: '0'
           severity: 'CRITICAL,HIGH'
+
+
+
           
   update_k8s_yaml_version_file_with_latest_image_tag:
     runs-on: ubuntu-latest
